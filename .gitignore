@@ -1,0 +1,102 @@
+#--------------------------------------
+#   通用忽略
+#--------------------------------------
+
+# 忽略 Mac OS 系统自动生成的文件
+.DS_Store
+
+# Windows 缓存文件
+Thumbs.db
+
+#--------------------------------------
+#   C/C++ 语言相关
+#--------------------------------------
+
+# 对象文件、预编译头、动态/静态库等
+*.o
+*.obj
+*.lo
+*.slo
+*.gch
+*.pch
+*.pdb  # Windows 调试符号文件
+*.mod
+
+# 库文件
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.dylib
+
+# 可执行文件
+*.exe
+*.out
+*.app
+*.elf
+
+# 生成的汇编文件或依赖文件
+*.s
+*.d
+*.dwo
+
+#--------------------------------------
+#   CMake 及其他构建系统
+#--------------------------------------
+
+# CMake 生成的缓存与构建目录
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Ninja 构建系统生成的文件
+build.ninja
+rules.ninja
+
+# 具体的构建输出目录
+build/
+bin/
+lib/
+
+#--------------------------------------
+#   编辑器 / IDE 配置文件
+#--------------------------------------
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# CLion
+.idea/
+*.ipr
+*.iws
+*.iml
+cmake-build-*
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+*.xcuserdata
+*.xcsettings
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln
+*.VC.db
+*.VC.opendb
+*.vcxproj*
+*.ncb
+*.filters
+ipch/
+*.opensdf
+
+# Eclipse
+.project
+.cproject
+.settings/
