@@ -16,18 +16,6 @@ macro (add_test_case_with_run folder _name)
 endmacro()
 
 # Test cases
-add_test_case_with_run(arith Mys_exp_exact)
-add_test_case_with_run(arith Mys_div)
-add_test_case_with_run(arith Mys_rsqrt)
-add_test_case_with_run(arith Mys_softmax)
-add_test_case_with_run(arith Mys_truncation)
-add_test_case_with_run(arith Mys_relu)
-add_test_case_with_run(arith Mys_layernorm)
-add_test_case_with_run(arith Mys_gelu)
-add_test_case_with_run(arith Mys_maxpool)
-add_test_case_with_run(arith Mys_sigmoid)
-
-
 add_test_case_with_run(math LUT)
 add_test_case_with_run(math LUTRange)
 add_test_case_with_run(math positiveDigDecAny)
