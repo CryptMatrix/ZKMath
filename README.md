@@ -27,7 +27,7 @@ cp -rf src/* emp-zk/emp-zk/ && rm -rf src \
 && mv -f CMakeLists.txt emp-zk/
 ```
 
-3. Recompile the code.
+3. Recompile the code, then the binary executables can be found at ./bin
 
 ```bash
 cd emp-zk
