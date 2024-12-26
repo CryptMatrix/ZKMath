@@ -2,7 +2,7 @@
 Source code and the implementation of the USENIX Security'24 paper - [_Scalable Zero-knowledge Proofs for Non-linear Functions in Machine Learning_](https://www.usenix.org/conference/usenixsecurity24/presentation/hao-meng-scalable).
 
 ## Introduction
-A novel scalable ZK proof framework for non-linear mathematical functions based on LUT techniques.
+A novel scalable ZK proof framework for non-linear mathematical functions in machine learning based on LUT techniques.
 
 ## Contents
 This repository consists of the following parts:
