@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	memset(witness, 0, dim * sizeof(uint64_t));
 
 	startComputation(party);
-
+	uint64_t constant = (1ULL << 16);
     IntFp *x = new IntFp[dim];
 	IntFp *y = new IntFp[dim];
 	__uint128_t *randomness = new __uint128_t[dim]; 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	prg.random_block((block*)randomness, dim);
     for (int i = 0; i < dim; i++){
 		if (party == ALICE){
-			witness[i] = randomness[i] % PR;
+			witness[i] = randomness[i] % constant;
 		}
 		x[i] = IntFp(witness[i], ALICE);
 	}

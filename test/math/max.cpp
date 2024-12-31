@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	memset(witness, 0, rows * cols * sizeof(uint64_t));
 
 	startComputation(party);
-
+	
     IntFp *x = new IntFp[rows * cols];
 	IntFp *y = new IntFp[rows];
 	__uint128_t *randomness = new __uint128_t[rows * cols]; 
@@ -47,7 +47,12 @@ int main(int argc, char **argv)
 	prg.random_block((block*)randomness, rows * cols);
     for (int i = 0; i < rows * cols; i++){
 		if (party == ALICE){
-			witness[i] = randomness[i] % PR;
+			// |x-y|<=(p-1)/2
+			witness[i] = randomness[i] % ((PR+1)/4);
+			uint64_t b = randomness[i] & 1;
+			if (b==1){
+				witness[i] = PR - witness[i]; 
+			}
 		}
 		x[i] = IntFp(witness[i], ALICE);
 	}

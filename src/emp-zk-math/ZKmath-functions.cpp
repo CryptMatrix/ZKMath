@@ -82,12 +82,8 @@ void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_
 	// step 2: construct uint64_t *digit_size and int num_digits
 	uint64_t num_digits = high_num_digit + low_num_digit;
 	uint64_t *digit_size = new uint64_t[num_digits];
-	cout << "num_digits = " << num_digits << endl;
-	cout << "digit_size = " << digit_size << endl;
 	for (int i = 0; i < low_num_digit - 1; i++){
-		cout << "i = " << i << endl;
 		digit_size[i] = NUM_RANGE - 1;
-		cout << "digit_size[i] = " << digit_size[i] << endl;
 	}
 	digit_size[low_num_digit - 1] = most_lowsize;
 	for (int i = low_num_digit; i < num_digits - 1; i++){
@@ -920,7 +916,7 @@ void ZKGeLU(int party, IntFp *x, IntFp *y, int dim)
 	delete[] z;
 }
 
-void ZKSoftmax(int party, IntFp *x, IntFp *y, int rows, int cols)  // x: rows*cols  y: rows
+void ZKSoftmax(int party, IntFp *x, IntFp *y, int rows, int cols)  // x: rows*cols  y: rows*cols
 {
 	IntFp *max = new IntFp[rows];
 	IntFp *z = new IntFp[rows * cols];
@@ -955,7 +951,7 @@ void ZKSoftmax(int party, IntFp *x, IntFp *y, int rows, int cols)  // x: rows*co
 	
 	// step 4: mult + trunc
 	for (int i = 0; i < rows; i++){
-		for (int j = 0; j < cols; j ++){
+		for (int j = 0; j < cols; j++){
 			y[i * cols + j] = t[i] * ez[i * cols + j];
 		}
 	}
