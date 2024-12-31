@@ -19,7 +19,7 @@ fi
 '''
 
 install_template = '''
-git clone https://github.com/emp-toolkit/X.git --branch Y
+git clone git@github.com:emp-toolkit/X.git --branch Y
 cd X
 cmake .
 make -j4
