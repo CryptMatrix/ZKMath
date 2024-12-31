@@ -8,7 +8,7 @@ using namespace std;
 int port, party;
 const int threads = 1;
 
-int dim = 1000;
+int dim = 100000;
 
 uint64_t comm(BoolIO<NetIO> *ios[threads])
 {
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 		ios[i] = new BoolIO<NetIO>(new NetIO(party == ALICE ? nullptr : "127.0.0.1", port + i), party == ALICE);
 
 	std::cout << std::endl
-			  << "------------ ZKpositiveTruncAny test ------------" << std::endl
+			  << "------------ ZKpositiveTruncation test ------------" << std::endl
 			  << std::endl;
 
 	setup_zk_bool<BoolIO<NetIO>>(ios, threads, party);
@@ -61,10 +61,9 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKpositiveTruncAny (ms): " << time / 1000 << " ms\t " << party << endl;
+	cout << "time - ZKpositiveTruncation (ms): " << time / 1000 << " ms\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
-	std::cout << "communication - ZKpositiveTruncAny (KB): " << com1 / 1024.0 << std::endl;
+	std::cout << "communication - ZKpositiveTruncation (KB): " << com1 / 1024.0 << std::endl;
 
 	/****************************/
 	/**** verify correctness ****/

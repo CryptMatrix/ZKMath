@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 		ios[i] = new BoolIO<NetIO>(new NetIO(party == ALICE ? nullptr : "127.0.0.1", port + i), party == ALICE);
 
 	std::cout << std::endl
-			  << "------------ Exp_exact zero-knowledge proof test ------------" << std::endl
+			  << "------------ ZKLUTRange test ------------" << std::endl
 			  << std::endl;
 
 	setup_zk_bool<BoolIO<NetIO>>(ios, threads, party);

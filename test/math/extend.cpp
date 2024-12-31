@@ -8,7 +8,7 @@ using namespace std;
 int port, party;
 const int threads = 1;
 
-int dim = 10000;
+int dim = 100000;
 
 uint64_t comm(BoolIO<NetIO> *ios[threads])
 {

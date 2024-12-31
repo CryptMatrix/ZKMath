@@ -69,8 +69,7 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKLayerNorm (s): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKLayerNorm: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKLayerNorm (KB): " << com1 / 1024.0 << std::endl;
 

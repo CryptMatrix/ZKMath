@@ -8,7 +8,7 @@ using namespace std;
 int port, party;
 const int threads = 1;
 
-int dim = 1000;
+int dim = 100000;
 
 uint64_t comm(BoolIO<NetIO> *ios[threads])
 {
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
 	startComputation(party);
 
-	uint64_t constant = (PR + 1)/2;
+	uint64_t constant = (1ULL << 16);
 	IntFp *x = new IntFp[dim];
 	IntFp *y = new IntFp[dim];
 	__uint128_t *randomness = new __uint128_t[dim]; 
@@ -59,8 +59,7 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKExp (ms): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKExp: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKExp (KB): " << com1 / 1024.0 << std::endl;
 
@@ -101,11 +100,11 @@ int main(int argc, char **argv)
 			double exp = std::exp(-1 * witness_real);
 			uint64_t exp_field = Real2Field(exp, SCALE);
 			uint64_t err_fixed = computeULPErr(ori_y, exp_field);
-      		if (err_fixed > 1)
-      		{
-        		cout << "ULP Error Fixed: " << ori_y << "," << exp_field << ","
-             		<< err_fixed << endl;
-      		}
+      		// if (err_fixed > 1)
+      		// {
+        	// 	cout << "ULP Error Fixed: " << ori_y << "," << exp_field << ","
+            //  		<< err_fixed << endl;
+      		// }
       		total_err_fixed += err_fixed;
       		max_ULP_err_fixed = std::max(max_ULP_err_fixed, err_fixed);
 		}

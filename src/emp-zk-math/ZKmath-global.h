@@ -1,6 +1,3 @@
-// #include "emp-zk/emp-zk-arith/LUT-range.h"
-// #include "emp-zk/emp-zk-arith/LUT.h"
-// #include "emp-zk/emp-zk-arith/LUT-twoValue.h"
 #include "emp-zk/emp-zk-math/LUT-range.h"
 #include "emp-zk/emp-zk-math/LUT.h"
 #include "emp-zk/emp-zk-math/LUT-twoValue.h"
@@ -15,6 +12,7 @@ extern LUTRangeIntFp *LUTRange[NUM_RANGE];  // 0~12
 // LUTdiv
 #define DIV_M 5     //(SCALE - 2)/2
 #define DIV_N 20
+// #define DIV_N 13
 extern LUTTwoValueIntFp *LUTdiv;
 
 // LUTextend

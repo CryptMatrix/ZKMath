@@ -35,7 +35,7 @@ void test_LUT(BoolIO<NetIO> *ios[threads], int party)
 	for(int i = 0; i < test_n; ++i) {
 		IntFp index = IntFp(i, ALICE);
 		IntFp value = IntFp(2*i, ALICE);
-		LUTram->LUTread(index, value);   // Warning：LUTread()形参只能传入一个variable，所以不能直接写入IntFp((uint64_t)i, PUBLIC)
+		LUTram->LUTread(index, value);   
 
 	}
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 		ios[i] = new BoolIO<NetIO>(new NetIO(party == ALICE ? nullptr : "127.0.0.1", port + i), party == ALICE);
 
 	std::cout << std::endl
-			  << "------------ Exp_exact zero-knowledge proof test ------------" << std::endl
+			  << "------------ ZKLUT test ------------" << std::endl
 			  << std::endl;
 
 	setup_zk_bool<BoolIO<NetIO>>(ios, threads, party);

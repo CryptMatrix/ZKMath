@@ -40,30 +40,18 @@ int main(int argc, char **argv)
 	startComputation(party);
 
 	uint64_t constant = (1ULL << DIV_N);
+
 	IntFp *x = new IntFp[dim];
 	IntFp *y = new IntFp[dim];
-	// for (int i = 0; i < dim; i++){
-	// 	if (party == ALICE){
-	// 		while (witness[i] == 0)
-	// 		{
-	// 			witness[i] = rand();
-	// 		}
-	// 		witness[i] = witness[i] & ((1ULL << DIV_N) - 1);  
-	// 		witness[i] = witness[i] % PR;
-	// 	}
-	// 	x[i] = IntFp(witness[i], ALICE);
-	// }
 	__uint128_t *randomness = new __uint128_t[dim]; 
 	PRG prg(fix_key);
 	prg.random_block((block*)randomness, dim);
     for (int i = 0; i < dim; i++){
 		if (party == ALICE){
 			witness[i] = randomness[i] % constant;
-			// if (witness[i] == 0){
-			// 	witness[i] = witness[i] + 1;
-			// }
-			if (witness[i] <= 1){
-				witness[i] = witness[i] + 1;
+			// only for witness>=1
+			if (witness[i] < (1ULL << SCALE)){       
+				witness[i] += (1ULL << SCALE);
 			}
 		}
 		x[i] = IntFp(witness[i], ALICE);
@@ -76,8 +64,7 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKDiv (ms): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKDiv: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKDiv (KB): " << com1 / 1024.0 << std::endl;
 
@@ -90,7 +77,7 @@ int main(int argc, char **argv)
 		for (int i = 0; i < dim; i++){
 			uint64_t msnzb = floor(log2(int64_t(witness[i])));
 			uint64_t z = witness[i] * (1ULL << (DIV_N - 1- msnzb));
-			uint64_t z0 = z & ((1ULL << (DIV_N - 1 - DIV_M)) - 1);   // 右移的部分必须加括号再-1啊，不然结果错误
+			uint64_t z0 = z & ((1ULL << (DIV_N - 1 - DIV_M)) - 1);   
 			uint64_t z1 = (z >> (DIV_N - 1 - DIV_M)) & ((1ULL << DIV_M) - 1);
 			uint64_t k = 1ULL << DIV_M;
 			// a \in (1/2, 1)
@@ -130,8 +117,6 @@ int main(int argc, char **argv)
     	cout << "Max ULP error fixed: " << max_ULP_err_fixed << endl;
     	cout << "Number of tests fixed: " << dim << endl;
 	}
-
-	// endComputation(party);
 
 	cout << "finish test" << endl;
 

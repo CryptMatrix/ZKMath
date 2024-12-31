@@ -42,19 +42,12 @@ int main(int argc, char **argv)
 
     IntFp *x = new IntFp[dim];
 	IntFp *y = new IntFp[dim];
-	// for (int i = 0; i < dim; i++){
-	// 	if (party == ALICE){
-	// 		witness[i] = rand() % PR;
-	// 	} 
-	// 	x[i] = IntFp(witness[i], ALICE);
-	// }
 	__uint128_t *randomness = new __uint128_t[dim]; 
 	PRG prg(fix_key);
 	prg.random_block((block*)randomness, dim);
     for (int i = 0; i < dim; i++){
 		if (party == ALICE){
-			// witness[i] = randomness[i] % PR;
-			witness[i] = 1;
+			witness[i] = randomness[i] % PR;
 		}
 		x[i] = IntFp(witness[i], ALICE);
 	}
@@ -67,8 +60,7 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKGeLU (ms): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKGeLU: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKGeLU (KB): " << com1 / 1024.0 << std::endl;
 

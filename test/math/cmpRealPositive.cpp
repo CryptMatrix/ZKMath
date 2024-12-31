@@ -8,7 +8,7 @@ using namespace std;
 int port, party;
 const int threads = 1;
 
-int dim = 1000;
+int dim = 100000;
 
 uint64_t comm(BoolIO<NetIO> *ios[threads])
 {
@@ -56,13 +56,11 @@ int main(int argc, char **argv)
 	uint64_t com = comm(ios);
 	auto start = clock_start();
 
-	// ZKcmpReal(party, x, y, dim);
 	ZKcmpPositive(party, x, constant, y, dim);
 
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
 	cout << "time - ZKcmpComputationPositive (ms): " << time / 1000 << " ms\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKcmpComputationPositive (KB): " << com1 / 1024.0 << std::endl;

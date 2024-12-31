@@ -1,6 +1,6 @@
 #include "emp-zk/emp-zk-math/ZKmath-functions.h"
 
-void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int num_digits, int dim)  // x:dim；y:num_digits*dim; num_digits:子串数，digit_size:每个子串的比特长度 digit_size:num_digits
+void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int num_digits, int dim)  // x:dim；y:num_digits*dim; num_digits: the number of sigits，digit_size: the size of each digit
 {
 	uint64_t curr_x = 0;
 	uint64_t ori_y = 0;
@@ -9,18 +9,18 @@ void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int n
 
 	// step1: compute y + check range
 	for (int i = 0; i < dim; i++){
-		// step 1: 数字分解最低位
+		// step 1: Digital decomposition of the lowest bit
 		int shiftlen = 0;
 		uint64_t curr_digitlen = digit_size[0];
 		uint64_t digit_mask = (1ULL << curr_digitlen) - 1;
 		if (party == ALICE){
 			curr_x = (uint64_t)HIGH64(x[i].value);
-			ori_y = (curr_x >> shiftlen) & digit_mask; // 此处先放了低位子串
+			ori_y = (curr_x >> shiftlen) & digit_mask; // The low-order digit is placed here
 		}
 		sum_ydigits[i] = IntFp(ori_y, ALICE);
 		y[i * num_digits] = sum_ydigits[i]; 
 
-		// step 2: check 分解出的最低位的 range
+		// step 2: check the range of the lowest digit
 		if (curr_digitlen > 1 && curr_digitlen < NUM_RANGE){
 			LUTRange[curr_digitlen]->LUTRangeread(y[i * num_digits]);
 		} else if (curr_digitlen == 1){
@@ -31,12 +31,12 @@ void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int n
 		}
 
 		for (int j = 1; j < num_digits; j++){
-			// step 3: 数字分解其余位
+			// step 3: Decompose the remaining digits
 			curr_digitlen = digit_size[j];
 			digit_mask = (1ULL << curr_digitlen) - 1;
 			shiftlen += digit_size[j - 1];
 			if (party == ALICE){
-				ori_y = (curr_x >> shiftlen) & digit_mask; // 此处先放了低位子串
+				ori_y = (curr_x >> shiftlen) & digit_mask; // The low-order digit is placed here
 			}
 			IntFp y_digit = IntFp(ori_y, ALICE);
 			y[i * num_digits + j] = y_digit; 
@@ -51,7 +51,7 @@ void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int n
 				error("Incorrect decomposition length");
 			}
 
-			// step 4: 求和
+			// step 4: sum
 			sum_ydigits[i] = sum_ydigits[i] + y_digit * (1ULL << shiftlen);
 		}
 
@@ -67,23 +67,27 @@ void ZKPositiveDigDec(int party, IntFp *x, IntFp *y, uint64_t *digit_size, int n
 	delete[] sum_ydigits;
 }
 
-void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_t highsize, uint64_t lowsize, int dim)    // 分解成任意长度 x: dim; xhigh: dim; ylow: dim
+void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_t highsize, uint64_t lowsize, int dim)    // Decompose into any size x: dim; xhigh: dim; ylow: dim
 {
 	uint64_t k = ceil(log2(PR));
 	assert(highsize + lowsize < k);
 
-	// step 1: 处理分解长度到合适
+	// step 1: Processing decomposition size
 	uint64_t high_num_digit = ceil((double)highsize/(NUM_RANGE - 1));
 	uint64_t most_highsize = highsize - (high_num_digit - 1) * (NUM_RANGE - 1);
 	
 	uint64_t low_num_digit = ceil((double)lowsize/(NUM_RANGE - 1));
 	uint64_t most_lowsize = lowsize - (low_num_digit - 1) * (NUM_RANGE - 1);
 
-	// step 2: 构造uint64_t *digit_size和int num_digits
+	// step 2: construct uint64_t *digit_size and int num_digits
 	uint64_t num_digits = high_num_digit + low_num_digit;
 	uint64_t *digit_size = new uint64_t[num_digits];
+	cout << "num_digits = " << num_digits << endl;
+	cout << "digit_size = " << digit_size << endl;
 	for (int i = 0; i < low_num_digit - 1; i++){
+		cout << "i = " << i << endl;
 		digit_size[i] = NUM_RANGE - 1;
+		cout << "digit_size[i] = " << digit_size[i] << endl;
 	}
 	digit_size[low_num_digit - 1] = most_lowsize;
 	for (int i = low_num_digit; i < num_digits - 1; i++){
@@ -97,7 +101,7 @@ void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_
 
 	// step 4: construct y
 	for (int i = 0; i < dim; i++){
-		// -- 先处理低位
+		// Deal with the low bits
 		int shiftlen = 0;
 		xlow[i] = y_digits[i * num_digits];
 		for (int j = 1; j < low_num_digit; j++){
@@ -105,7 +109,7 @@ void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_
 			xlow[i] = xlow[i] + y_digits[i * num_digits + j] * (1ULL << shiftlen);
 		}
 
-		// -- 再处理高位
+		// then high bits
 		shiftlen = 0;
 		xhigh[i] = y_digits[i * num_digits + low_num_digit];
 		for (int j = 1; j < high_num_digit; j++){
@@ -119,11 +123,18 @@ void ZKPositiveDigDecAny(int party, IntFp *x, IntFp *xhigh, IntFp *xlow, uint64_
 
 void ZKpositiveTruncAny(int party, IntFp *x, IntFp *y, int dim, uint64_t trunclen)   
 {
-	uint64_t m = ceil(log2(PR)) - 1;
-	IntFp *ylow = new IntFp[dim];
-	ZKPositiveDigDecAny(party, x, y, ylow, m - trunclen, trunclen, dim);
+	if (trunclen == 0){
+		for (int i = 0; i < dim; i++){
+			y[i] = x[i];
+		}
+	}else{
+		uint64_t m = ceil(log2(PR)) - 1;
+		IntFp *ylow = new IntFp[dim];
+		ZKPositiveDigDecAny(party, x, y, ylow, m - trunclen, trunclen, dim);
 
-	delete[] ylow;
+		delete[] ylow;
+	}
+	
 }
 
 void ZKgeneralTruncAny(int party, IntFp *x, IntFp *y, int dim, uint64_t trunclen)   
@@ -147,7 +158,6 @@ void ZKgeneralTruncAny(int party, IntFp *x, IntFp *y, int dim, uint64_t trunclen
 
 	// step 3: line 3
 	for (int i = 0; i < dim; i++){
-		// cout << "i = " << i << endl;
 		y[i] = t1[i] * zTrunc[i] + t2[i].negate();
 	}
 
@@ -692,7 +702,7 @@ void ZKDiv(int party, IntFp *x, IntFp *y, int dim)  //y=1/x
 		extendLen[i] = k[i].negate() + (DIV_N - 1);
 	}
 	IntFp *z = new IntFp[dim];
-	ZKExtend(party, x, extendLen, z, dim);
+	ZKExtend(party, x, extendLen, z, dim);  
 
 	// step 3: DigitDec
 	for (int i = 0; i < dim; i++){
@@ -726,7 +736,7 @@ void ZKDiv(int party, IntFp *x, IntFp *y, int dim)  //y=1/x
 	ZKpositiveTruncAny(party, yprime, yprimeTrunc, dim, DIV_N - 1);
 
 	ZKExtend(party, yprimeTrunc, extendLen, yprime, dim);  // re-use yprime to place the outputs of ZKExtend
-	ZKpositiveTruncAny(party, yprime, y, dim, DIV_N - SCALE - 1);
+	ZKpositiveTruncAny(party, yprime, y, dim, DIV_N - SCALE - 1);  
 
 	delete[] k;
 	delete[] extendLen;

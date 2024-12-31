@@ -42,19 +42,12 @@ int main(int argc, char **argv)
 
     IntFp *x = new IntFp[rows * cols];
 	IntFp *y = new IntFp[rows];
-	// for (int i = 0; i < rows * cols; i++){
-	// 	if (party == ALICE){
-	// 		witness[i] = rand() % PR;
-	// 	} 
-	// 	x[i] = IntFp(witness[i], ALICE);
-	// }
 	__uint128_t *randomness = new __uint128_t[rows * cols]; 
 	PRG prg(fix_key);
 	prg.random_block((block*)randomness, rows * cols);
     for (int i = 0; i < rows * cols; i++){
 		if (party == ALICE){
-			// witness[i] = randomness[i] % PR;
-			witness[i] = 1;
+			witness[i] = randomness[i] % PR;
 		}
 		x[i] = IntFp(witness[i], ALICE);
 	}
@@ -67,36 +60,9 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKMax (s): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKMax: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKMax (KB): " << com1 / 1024.0 << std::endl;
-
-	/****************************/
-	/**** verify correctness ****/
-	/****************************/
-	// if (party == ALICE){
-	// 	int64_t witness_int = 0;
-	// 	uint64_t output_real = 0;
-	// 	uint64_t output_prot = 0;
-	// 	for (int i = 0; i < rows; i++){
-	// 		int64_t max_y = witness[i * cols] > (PR-1)/2 ? witness[i * cols] - PR : witness[i * cols];
-	// 		for (int j = 1; j < cols; j++){
-	// 			witness_int = witness[i * cols + j] > (PR-1)/2 ? witness[i * cols + j] - PR : witness[i * cols + j];
-	// 			// if (witness[i * cols + j] > (PR-1)/2 && witness_int < 0){
-	// 			// 	cout << "this is a negative value" << endl;
-	// 			// }
-	// 			if (witness_int > max_y){
-	// 				max_y = witness_int;
-	// 			}
-	// 		}
-	// 		output_real = max_y < 0 ? PR + max_y : max_y;
-	// 		output_prot = (uint64_t)HIGH64(y[i].value);
-	// 		if (output_real != output_prot){
-	// 			cout << "fault !!!" << endl;
-	// 		}
-	// 	}
-	// }
 
 	cout << "finish test" << endl;
 

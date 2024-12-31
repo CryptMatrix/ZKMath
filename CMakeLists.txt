@@ -14,7 +14,6 @@ include_directories(${EMP-OT_INCLUDE_DIRS})
 set(sources
   emp-zk/emp-zk-bool/emp-zk-bool.cpp
   emp-zk/emp-zk-arith/emp-zk-arith.cpp
-  # emp-zk/emp-zk-arith/ZKmath-global.cpp    # our ZKmath
   emp-zk/emp-zk-math/ZKmath-global.cpp    # our ZKmath
   emp-zk/emp-zk-math/ZKmath-functions.cpp
 )

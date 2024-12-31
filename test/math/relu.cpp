@@ -55,7 +55,6 @@ int main(int argc, char **argv)
 	uint64_t com = comm(ios);
 	auto start = clock_start();
 
-	// ZKcmpReal(party, x, y, dim);
 	ZKcmpPositive(party, x, constant, y, dim);
 	for (int i = 0; i < dim; i++){
 		y[i] = y[i] * x[i];
@@ -64,8 +63,7 @@ int main(int argc, char **argv)
 	endComputation(party);
 
 	double time = time_from(start);
-	cout << "Performance without LUT construction" << endl;
-	cout << "time - ZKrelu (ms): " << time / 1000000 << " s\t " << party << endl;
+	cout << "time - ZKrelu: " << time / 1000000 << " s\t " << party << endl;
 	uint64_t com1 = comm(ios) - com;
 	std::cout << "communication - ZKrelu (KB): " << com1 / 1024.0 << std::endl;
 
